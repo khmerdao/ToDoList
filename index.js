@@ -1,82 +1,93 @@
-
-//CLASS
+// #### DEBUT CLASS ####
 class List{
-    
-}
-
-//FORMULAIRE
-let ajouter = document.getElementById("ajouter");
-let listing = document.getElementById("listing");
-let formulaire = document.getElementById("formulaire");
-
-var cpt = 0;
-
-function ajout(cpt){
-    let valeur = document.getElementById("inputText").value;
-    listing.innerHTML += `
-    <div id="ligne${cpt}">
-    <input  class="check${cpt}" type="checkbox" onclick="barrer(${cpt})">
-    <p class="texto${cpt}">${valeur}</p>
-    <button class="supprimer" type="button" onclick="del(${cpt})">Supprimer</button>
-    </div>
-    `;
-    cpt++;
-}
-
-// ajouter.addEventListener("click", ajout);
-// check.addEventListener("click", barrer);
-function barrer(ligne)
-{
-    //Liste
-
-    let check = document.querySelector(`.check${ligne}`);
-    let text = document.querySelector(`.texto${ligne}`);
-    if(check.checked)
-    {
-        return (text.className += " barrer");
+    constructor(text){
+        this.text = text;
+        this.done = false;
     }
-    else { return (text.className = `texto${ligne}`);}
+}
+//#### FIN CLASS ####
+
+//#### DEBUT DATA ####
+if(localStorage.length == 0) {
+    localStorage.setItem("liste 1", "[]");
 }
 
-function del(ligne)
-{
-    let div = document.querySelector(`#ligne${ligne}`);
-    let text = document.querySelector(`.texto${ligne}`);
-    // let check = document.querySelector(`.check${ligne}`);
-    // let textcontenu = text.textContent;
-    
-    // console.log(textcontenu);
-    // if(!check.checked)
-    // {
-    //     if( confirm("Etes vous sur de vouloir supprimer ?") ){
-    //         div.innerHTML = ``;
-    //     }
-    // }
-    // else {
-    //     div.innerHTML = ``;
-    // }
+let listAll1 = []; //creation d'un listing
+let key1 = localStorage.getItem("liste 1"); // creer par defaut une key "liste 1" dans le local storage
+let listeAafficher = JSON.parse(key1); //transforme ce qu'il y a dans le localStorage en JSON
 
-    if(text.className == `texto${ligne}`)
+let ajouter = document.getElementById("ajouter");
+let formulaire = document.getElementById("formulaire");
+let listing = document.getElementById("listing");
+
+let cpt = 0; //compteur de nbr de ligne
+
+//#### FIN DATA ####
+
+//#### DEBUT FONCTIONS ####
+
+function affiche(tabs) //Fonction qui affiche la liste dans le HTML a partir des données du LocalStorage 
+{
+    listing.innerHTML = "";
+    for(let i=0; i<tabs.length; i++){
+        listing.innerHTML += `
+        <hr>
+        <div id="ligne${i}" class="ligne">
+            <input type="checkbox"  id="check${i}" class="check" onclick="checker(this, ${i})">
+            <label class="txt" for="check${i}">${tabs[i].text}</label>
+            <button class="supprimer" type="submit" form="formulaire" onclick="del(this, ${i})">X</button>
+        </div>`
+    }
+}
+
+
+function checker(e, i){ //CHange la valeur de "".done"
+    // console.log(e.checked);
+    listAll1[i].done = e.checked;
+    // console.log(listAll1[i].done);
+}
+
+
+function ajout(){ //Ajoute une liste au listing
+    let valeur = document.getElementById("inputText").value;
+    const liste = new List(valeur);
+    if(localStorage.length !== 0)
     {
-        if( confirm("Etes vous sur de vouloir supprimer ?") ){
-        div.outerHTML = "";
-        //     = `            
-        //     <div id="ligne${ligne}">
-        //     <input  class="check${ligne}" type="checkbox" onclick="barrer(${ligne})">
-        //     <p class="texto${ligne}">${textcontenu}</p>
-        //     <button class="supprimer" type="button" onclick="del(${ligne})">Supprimer</button>
-        //     </div>
-        //     `;
+        listAll1 = listeAafficher;
+    }
+    listAll1.push(liste);
+    localStorage.setItem("liste 1", JSON.stringify(listAll1));
+    cpt++;    
+}
+
+
+function del(e, ligne) //Suppression d'une To do
+{
+    let div = document.getElementById(`#ligne${ligne}`);
+    let check = document.getElementById(`#check${ligne}`);
+    console.log(check);
+    if(listAll1[ligne].done === false)
+    {
+        if( confirm("Etes vous sur de vouloir supprimer ?") === true){
+            listAll1.splice(ligne, 1);
+            localStorage.setItem("liste 1", JSON.stringify(listAll1));
+            document.e.reload(true);
         }
     }
     else {
-        div.outerHTML = "" ;
-        // = `
-        // <div id="ligne${ligne}">
-        // <input  class="check${ligne}" type="checkbox" onclick="barrer(${ligne})">
-        // <p class="texto${ligne}">${textcontenu}</p>
-        // <button class="supprimer" type="button" onclick="del(${ligne})">Supprimer</button>
-        // </div>
-        // `;
+        listAll1.splice(ligne, 1);
+        localStorage.setItem("liste 1", JSON.stringify(listAll1));
+        document.e.reload(true);
     }
+
 }
+//#### FIN FONCTIONS ####
+
+
+//#### PROGRAMME PRINCIPAL ####
+
+    listAll1 = listeAafficher;
+    affiche(listAll1);
+
+
+//########## FIN ##############
