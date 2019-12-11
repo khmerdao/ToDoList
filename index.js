@@ -12,26 +12,50 @@ if(localStorage.length == 0) {
     localStorage.setItem("liste 1", "[]");
 }
 
+
 let listAll1 = []; //creation d'un listing
 let key1 = localStorage.getItem("liste 1"); // creer par defaut une key "liste 1" dans le local storage
 let listeAafficher = JSON.parse(key1); //transforme ce qu'il y a dans le localStorage en JSON
 
 let ajouter = document.getElementById("ajouter");
 let formulaire = document.getElementById("formulaire");
-let listing = document.getElementById("listing");
+let listing = document.getElementById("liste1");
 
 let cpt = 0; //compteur de nbr de ligne
-
+let nbrListe = 1;
 //#### FIN DATA ####
 
 //#### DEBUT FONCTIONS ####
 
-function affiche(tabs) //Fonction qui affiche la liste dans le HTML a partir des données du LocalStorage 
+// function affiche(tabs) //Fonction qui affiche la liste dans le HTML a partir des données du LocalStorage 
+// {
+//     listing.innerHTML = "";
+//     for(let i=0; i<tabs.length; i++){
+//         listing.innerHTML += `
+//         <div id="ligne${i}" class="ligne">
+//             <input type="checkbox"  id="check${i}" class="check" onclick="checker(this, ${i})">
+//             <label class="txt" for="check${i}">${tabs[i].text}</label>
+//             <button class="supprimer" type="submit" form="formulaire" onclick="del(this, ${i})">X</button>
+//         </div>`
+//     }
+// }
+
+function afficheCarousel(tabs) //Nouvel fonction affiche pour le carousel 
 {
-    listing.innerHTML = "";
+    let liste1 = document.getElementById("liste1");
+    let liste2 = document.getElementById("liste2");
+    let liste3 = document.getElementById("liste3");
+    let liste = liste1;
+
     for(let i=0; i<tabs.length; i++){
-        listing.innerHTML += `
-        <hr>
+    
+        if(i == 5){
+            liste = liste2;
+        }
+        else if(i == 10){
+            liste = liste3;
+        }
+        liste.innerHTML += `
         <div id="ligne${i}" class="ligne">
             <input type="checkbox"  id="check${i}" class="check" onclick="checker(this, ${i})">
             <label class="txt" for="check${i}">${tabs[i].text}</label>
@@ -39,7 +63,6 @@ function affiche(tabs) //Fonction qui affiche la liste dans le HTML a partir des
         </div>`
     }
 }
-
 
 function checker(e, i){ //CHange la valeur de "".done"
     // console.log(e.checked);
@@ -58,6 +81,7 @@ function ajout(){ //Ajoute une liste au listing
     listAll1.push(liste);
     localStorage.setItem("liste 1", JSON.stringify(listAll1));
     cpt++;    
+    creationList();
 }
 
 
@@ -87,7 +111,7 @@ function del(e, ligne) //Suppression d'une To do
 //#### PROGRAMME PRINCIPAL ####
 
     listAll1 = listeAafficher;
-    affiche(listAll1);
-
+    afficheCarousel(listAll1);
+    console.log("listeAll1.length = "+listAll1.length);
 
 //########## FIN ##############
