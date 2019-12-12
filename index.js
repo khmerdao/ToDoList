@@ -24,7 +24,7 @@ let ajouter = document.getElementById("ajouter");
 let formulaire = document.getElementById("formulaire");
 let listing = document.getElementById("liste1");
 
-ajouter.className = "red";
+ajouter.className = ""
 
 let nbrLigneMax = 5; //compteur de nbr de ligne
 let nbrSlide = 1; // nbr de slide par defaut
